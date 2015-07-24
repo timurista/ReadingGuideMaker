@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
-	<title>{{Title}} - Reading Guide</title>
+	<title>Reading Guide</title>
 
 	<!-- <title>Reading Guide Maker</title> -->
 	<!-- Latest compiled and minified CSS -->
@@ -55,11 +55,20 @@
 		    vertical-align: top;
 		}*/
 		.sidebar {
-			}	
+			}
+		#sidebarInput {
+			display: inline;
+		}	
+		#sidebarQuestion {
+			display: none;
+		}	
 
 		@media print {
-			.nav {
+			.nav, #sidebarInput {
 				display: none;
+			}
+			#sidebarQuestion {
+				display: block !important;
 			}
 		}
 	</style>
@@ -82,8 +91,16 @@
 						<input type="number" class="form-control" placeholder="Show words by this number" ng-model="breakBy">
 					</div>
 					<div class="col-xs-2">
-						<label>Number of Commentary</label>
-						<input type="number" class="form-control" placeholder="Pages for Commentary" ng-model="groupNum">
+						<label># Double-Sided Pages</label>
+						# {{offset(extraPages)}}
+						
+						<div class="col-sm-4 control-label">
+							Extra Pages
+						</div>
+						<div class="col-sm-8">
+							<input type="number" class="form-control" ng-model="extraPages">
+						
+						</div>
 					</div>
 					
 				</div>
@@ -99,22 +116,6 @@
 						<button class="btn btn-primary" ng-click="makeGuide(text)">Create Word Groups</button>						
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-xs-12">
-						<ul>
-							<li ng-repeat="q in questions">
-								<div class="col-xs-11">
-									<input type="text" class="form-control" ng-model="q">
-								</div>
-								<div class="col-xs-1">
-									<button class="btn btn-danger" ng-click="questions.splice($index,1)">X</button>									
-									
-								</div>
-								
-							</li>
-						</ul>
-					</div>
-				</div>
 				
 			</div>
 		</row>
@@ -122,12 +123,25 @@
 		<div="row">
 			<!-- Comments -->
 			<div class="col-xs-4">
-				<div class="row sidebar"  ng-repeat="g in makeGroupsInRange(groupNum)">
+				<div class="row sidebar"  ng-repeat="g in makeGroupsInRange(offset(extraPages))">
 					<h4 class="text-center">{{title}}</h4>
 					<h5 class="text-center">Part {{$index+1}}</h5>
 					<h6 class="text-center">By {{author}}</h6>
-					<div  ng-repeat="q in questions" contentEditable="true">
-						{{$index+1}}. {{q}}
+					<div  ng-repeat="q in questions">
+						<div id="sidebarInput">
+							<div class="col-xs-11">
+								<textarea type="text" class="form-control" ng-model="q" rows="3"></textarea>
+								</div>
+								<div class="col-xs-1">
+									<button class="btn btn-danger" ng-click="questions.splice($index,1)">X</button>									
+									
+								</div>
+								
+						</div>
+						<div id="sidebarQuestion">
+							{{$index+1}}. {{q}}						
+						</div>
+
 						<textarea rows="10" class="form-control"></textarea>
 					</div>
 					
@@ -137,8 +151,8 @@
 				
 			</div>
 			<!-- text -->
-			<div class="col-xs-8 text">
-				<p ng-bind-html="trustedHtml"></p>
+			<div class="col-xs-8 text" >
+				<p ng-bind-html="trustedHtml" id="output"></p>
 				
 			</div>
 		</div>

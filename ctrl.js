@@ -32,7 +32,14 @@ Curabitur vehicula malesuada eros, sit amet porta dui imperdiet quis. Curabitur 
 	$scope.displayText = $scope.text.replace(/\n+/g,"<p>");;
 	$scope.trustedHtml = $sce.trustAsHtml($scope.displayText);
 	$scope.groups = [1];
-	$scope.groupNum = 1;
+	$scope.extraPages = 0;
+	$scope.offset = function(ep) {
+		var ep = ep || 0;
+		var offsetHeight = document.getElementById('output').offsetHeight;
+		g = Math.ceil(offsetHeight/970);
+		console.log(g,offsetHeight)
+		return g+ep;
+	}
 	$scope.makeGroupsInRange = function (num) {
 		var arr = [];
 		for (var i = 0; i < num; i++) {
@@ -40,51 +47,20 @@ Curabitur vehicula malesuada eros, sit amet porta dui imperdiet quis. Curabitur 
 		};
 		return arr;
 	}
-	$scope.makeGroups = function() {
-		// wpp depends on breaksBy
-		// wpp = 750 for 50, 800 for 100, 450 for 1
-		//  544.8764 + 44.8737Ln(X) 
-
-
-		var wpp = 544.8764 + (44.8737 * Math.log($scope.breakBy));
-		console.log(wpp);
-
-		var g = Math.ceil($scope.text.split(" ").length/wpp);
-		return g;
-		// console.log(g,$scope.text.split(" "));
-		// var arr = []
-		// // return [];
-		// for (var i = 0; i < g; i++) {
-		// 	arr.push(i)
-		// };
-		// return arr;
-	}
-	// $scope.makeGroups = function (dtext) {
-	// 	var displays = angular.copy(dtext.split(" "));
-	// 	var groups = [], size = 800;
-
-	// 	while (displays.length > 0)
-	// 	    groups.push(displays.splice(0, size).join(" "));
-	// 	return groups;
-	// }
-	// $scope.groups = $scope.makeGroups($scope.displayText);
-
+	
 	$scope.makeGuide = function(text) {
 		if ($scope.breakBy>0) {
 			var textArr = text.split(" ");
 			var newText = text;
-			console.log(textArr.length);
+			// console.log(textArr.length);
 			for (var i = $scope.breakBy; i <=textArr.length; i+=$scope.breakBy) {
 				textArr[i-1]+=' <span class="number">'+i+'</span>'
 			}
 			$scope.displayText = textArr.join(" ").replace(/\n+/g,"<p>");
-			// $scope.groups = $scope.makeGroups($scope.displayText);
-			$scope.trustedHtml = $sce.trustAsHtml($scope.displayText);			
-			// $scope.groups = $sce.trustAsHtml($scope.groups);			
+			$scope.trustedHtml = $sce.trustAsHtml($scope.displayText);
 		}
-		$scope.groupNum = $scope.makeGroups();
-		// $scope.groups = $scope.makeGroupsInRange();
 		return 
+
 
 	}
 
