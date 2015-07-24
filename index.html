@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<title>{{Title}} - Reading Guide</title>
+
+	<!-- <title>Reading Guide Maker</title> -->
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+		<!-- angular js -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+	<!-- custom -->
+	<script src="./ctrl.js"></script>
+	<!-- custom styling -->
+	<style>
+	p {
+		text-indent: 50px;
+		/*line-height: 200%;*/
+	}
+		.text {
+			padding: 20px;
+		}
+		.number {
+			text-decoration: bold;
+			border: 1px black solid;
+			padding: 1px 2px;
+			font-size: 10pt;
+			font-weight: bold;
+		}
+		.sidebar {
+			border: 2px black solid;
+			border-radius: 25px; 
+			padding: 20px;
+			height : 1820px;
+			margin-bottom: 20px;
+/*			min-height: 850px;
+			max-height: 860px;*/
+
+		}
+		.nav {
+			background-color: lightblue;
+		}
+		.form-control {
+			background-color: #E0EEF3;
+		}
+
+/*		.row {
+		    display: table;
+		}
+
+		.row [class*="col-"] {
+		    float: none;
+		    display: table-cell;
+		    vertical-align: top;
+		}*/
+		.sidebar {
+			}	
+
+		@media print {
+			.nav {
+				display: none;
+			}
+		}
+	</style>
+</head>
+<body >
+	<div class="container-fluid" ng-controller="Ctrl">
+		<row>
+			<div class="nav navbar">
+				<div class="row">
+					<div class="col-xs-4">
+						<label>Title</label>
+						<input type="text" class="form-control" placeholder="title" ng-model="title">
+					</div>
+					<div class="col-xs-4">
+						<label>Author</label>
+						<input type="text" class="form-control" placeholder="title" ng-model="author">
+					</div>
+					<div class="col-xs-2">
+						<label>Words</label>
+						<input type="number" class="form-control" placeholder="Show words by this number" ng-model="breakBy">
+					</div>
+					<div class="col-xs-2">
+						<label>Number of Commentary</label>
+						<input type="number" class="form-control" placeholder="Pages for Commentary" ng-model="groupNum">
+					</div>
+					
+				</div>
+				
+				<div class="row">
+					<label class="col-xs-1">
+						Text
+					</label>
+					<div class="col-xs-9">
+						<textarea class="form-control" ng-model="text"></textarea>
+					</div>
+					<div class="col-xs-2">
+						<button class="btn btn-primary" ng-click="makeGuide(text)">Create Word Groups</button>						
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<ul>
+							<li ng-repeat="q in questions">
+								<div class="col-xs-11">
+									<input type="text" class="form-control" ng-model="q">
+								</div>
+								<div class="col-xs-1">
+									<button class="btn btn-danger" ng-click="questions.splice($index,1)">X</button>									
+									
+								</div>
+								
+							</li>
+						</ul>
+					</div>
+				</div>
+				
+			</div>
+		</row>
+
+		<div="row">
+			<!-- Comments -->
+			<div class="col-xs-4">
+				<div class="row sidebar"  ng-repeat="g in makeGroupsInRange(groupNum)">
+					<h4 class="text-center">{{title}}</h4>
+					<h5 class="text-center">Part {{$index+1}}</h5>
+					<h6 class="text-center">By {{author}}</h6>
+					<div  ng-repeat="q in questions" contentEditable="true">
+						{{$index+1}}. {{q}}
+						<textarea rows="10" class="form-control"></textarea>
+					</div>
+					
+				</div>
+				
+				
+				
+			</div>
+			<!-- text -->
+			<div class="col-xs-8 text">
+				<p ng-bind-html="trustedHtml"></p>
+				
+			</div>
+		</div>
+	</div>
+
+	
+
+
+</body>
+</html>
